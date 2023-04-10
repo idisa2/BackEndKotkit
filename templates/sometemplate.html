@@ -1,0 +1,417 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="modal fade" id="exampleModal0" tabindex="999" aria-labelledby="exampleModalLabel0" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel0">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Recipient:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+                <div class="container-fluid">
+
+
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <button class="btn btn-primary" id="filter">Filtrer</button>
+                        </div>
+
+<!--                        <div class="col-md-6 col-lg-4 my-4">-->
+<!--                            <div class="card card-primary card-outline">-->
+<!--                              <div class="card-header">-->
+<!--                                <h3 class="card-title">-->
+<!--                                  <i class="far fa-chart-bar"></i>-->
+<!--                                  Distribution des signalements par sexe-->
+<!--                                </h3>-->
+
+<!--                                <div class="card-tools">-->
+<!--                                  <button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+<!--                                    <i class="fas fa-minus"></i>-->
+<!--                                  </button>-->
+<!--                                </div>-->
+<!--                              </div>-->
+<!--                              <div class="card-body">-->
+<!--                                    <div class="row mb-4">-->
+<!--                                        <div class="col-12">-->
+<!--                                            <div id='myDiv'>&lt;!&ndash; Plotly chart will be drawn inside this DIV &ndash;&gt;</div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </div>
+
+                    <div class="card shadow mb-5 col-12 ml-1" id="filter-body">
+                    <div class="card-body">
+                        <form method="GET" action="">
+                            <h3>Filtrer les resultats</h3>
+                            <div class="form-group">
+                                <label>Date de début</label>
+                                <input type="date" name="date1" value="" class="form-control form-control-user"
+                                       placeholder="Date de Debut" autofocus />
+
+                            </div>
+                            <div class="form-group">
+                                <label>Date de fin</label>
+                                <input type="date" name="date2" value="" class="form-control form-control-user"
+                                       placeholder="Date de fin" />
+                            </div>
+
+                            <div class="form-group">
+                              <label for="sexe">State</label>
+                              <select id="sexe"  name="sexe"  class="form-control">
+                                <option value="">Inconnu </option>
+                                <option value="H">Homme</option>
+                                <option value="F">Femme</option>
+                              </select>
+                            </div>
+
+
+                            <div class="form-group">
+                              <label for="dept">Département</label>
+                              <select id="dept"  name="dept"  class="form-control">
+                                    <option value="">Tous les départements </option>
+                                {% for d in data.all_depts %}
+                                    <option value="{{d.id}}" >
+                                       {{d.nom|capfirst}}
+                                    </option>
+                                {% endfor %}
+                              </select>
+                            </div>
+
+
+                            <div class="form-group">
+                              <label for="comm">Commune</label>
+                              <select id="comm"  name="comm"  class="form-control">
+                                    <option value="">Toutes les communes </option>
+                                {% for d in data.all_communes %}
+                                   <option value="{{d.id}}" >
+                                       {{d.nom|capfirst}}
+                                   </option>
+                                {% endfor %}
+                              </select>
+                            </div>
+
+
+                            <div class="text-center custom-pro-edt-ds">
+                                <button type="submit" class="btn btn-block btn-primary">Valider</button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Signalement Total
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.all_signalements }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Signalement Confirmé
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.confirmed_signalements }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Faux Signalements
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.fake_signalements }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Signalements Vocaux
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.voice_signalements }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Signalements Ecrits
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.no_voice_signalements }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Signalements Traités
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.all_processed_signalements }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+<!--                        Acteurs -->
+
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Acteurs Actifs
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.acteurs }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Acteurs En Attente d'activation
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.no_acteurs }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+<!--                        Entretiens-->
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Entretiens
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.all_entretiens }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+<!--                        RDVs-->
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            tous les RDV
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.all_rdvs }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            RDV EffectuÉs
+                                            </div>
+                                            <div class="h3 mb-0 font-weight-bold text-gray-800">{{ data.done_rdvs }}</div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <script src='https://cdn.plot.ly/plotly-2.9.0.min.js'></script>
+
+                <script>
+                  $("#filter-body").hide();
+                    $("#filter").click(function(){
+                      $("#filter-body").toggle(1000);
+                    });
+                    console.log("Hello kader");
+                </script>
+                <script>
+<!--                    const  data0 = {{ data|safe }};-->
+<!--                    console.log({{ data0 }});-->
+                    console.log("--------------------------------");
+                    const  data1 = "{{ data|escapejs }}";
+                    console.log(typeof(data1))
+                    let data2 = JSON.parse(JSON.stringify(data1));
+                    console.log(data2);
+                    console.log(typeof(data2))
+<!--                    console.log(data2["data_all_signalements"]);-->
+
+                </script>
+
+
+                <script>
+                var data = [{
+                  values: [16, 15, 12, 6, 5, 4, 42],
+                  labels: ['US', 'China', 'European Union', 'Russian Federation', 'Brazil', 'India', 'Rest of World' ],
+                  domain: {column: 0},
+                  name: 'GHG Emissions',
+                  hoverinfo: 'label+percent+name',
+                  hole: .4,
+                  type: 'pie'
+                }];
+
+                var layout = {
+                  title: '',
+                  annotations: [
+                    {
+                      font: {
+                        size: 20
+                      },
+                      showarrow: false,
+                      text: 'SEXE',
+                      x: 0.17,
+                      y: 0.5
+                    }
+                  ],
+                  height: 400,
+                  width: 600,
+                  showlegend: false,
+                  grid: {rows: 1, columns: 2}
+                };
+
+                Plotly.newPlot('myDiv', data, layout);
+
+
+                </script>
+
+
+
+{% endblock %}

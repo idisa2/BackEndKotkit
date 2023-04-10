@@ -1,0 +1,7 @@
+dj_rest_auth==2.1.11
+Django==4.0
+django_storages==1.12.3
+djangorestframework==3.13.0
+protobuf==3.19.1
+speechbrain==0.5.10
+torchaudio==0.10.0
