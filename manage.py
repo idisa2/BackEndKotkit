@@ -3,10 +3,6 @@
 import os
 import sys
 
-"""
-OCI user: Kader Saka
-pass: QriD7yBa951V9v0LF+
-"""
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'codelab.settings')
